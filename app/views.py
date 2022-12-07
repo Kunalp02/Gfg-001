@@ -1,22 +1,23 @@
 from django.shortcuts import render, HttpResponse
 from . models import User
 from django.db.models import Q
-# Create your views here.
 
-def get_info(request):
+
+def show_all(request):
     users = User.objects.all() # This command outputs all user objects that we have created at start.
-    print(users)
+    return render(request, 'show_details.html' , context={'users':users})
 
+
+def show_indians(request):
     # 1st solution
-    users = User.objects.filter(country='India').exclude(country='Japan')
-    for user in users:
-        print("Persons belongs to India", user.user_name)
+    show_indians = User.objects.filter(country='India').exclude(country='Japan') 
+    return render(request, 'show_details.html' , context={'show_indians':show_indians})
 
+
+def show_non_indians(request):
     # 2nd Solution
-    users = User.objects.filter(~Q(country='India'))  
+    show_non_indians = User.objects.filter(~Q(country='India'))  
+    return render(request, 'show_details.html' , context={'show_non_indians':show_non_indians})
 
-    for user in users:
-        print("Persons belongs to Japan", user.user_name)
 
-    return HttpResponse('Done!')
 
